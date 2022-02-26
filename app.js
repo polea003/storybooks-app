@@ -1,11 +1,13 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const mongoose = require('mongoose')
 const morgan = require('morgan')
 const { engine } = require('express-handlebars')
 const connectDB = require('./config/db')
 const path = require('path')
 const passport = require('passport')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 
 // load config
 dotenv.config({ path: './config/config.env' })
@@ -29,6 +31,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
   }))
 
 // passport middleware
